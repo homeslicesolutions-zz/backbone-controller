@@ -1,18 +1,14 @@
 Backbone.Controller (a different perspective)
 =============================================
-No not Router, but an actual Controller
+No not Router, but an independent Controller
 
-This new class basically sits between the View and Model and acts as sort of the "manager" of the two worlds as a Controller should.  When reading a Controller class, it should display the workflow of that module showing how the pieces fit together between Models and Views. Lastly, it also acts like an interface to a particular module so that it should contain methods that represent a general task of that module.  More importantly, it doesn't inherit the "technical knowledge" of Models and Views which is data parsing and DOM manipulation resepectively (shouldn't contain any Underscore or jQuery).  All it has under it's toolbelt is Backbone.Events so it can listen and act linking the tasks between the Models and View.  So yes it adds an extra layer, but like every good micro-manager, it always knows what's going on all the time.
+This new class basically sits between the View and Model and acts as sort of the "manager" of the two worlds as a Controller should.  Like the View this is to provide more consistency for the module/app. When reading a Controller class, it should display the workflow of that module showing how the pieces fit together between Models and Views. Lastly, it also acts like an interface to a particular module so that it should contain methods that represent a general task of that module.  More importantly, it doesn't inherit the "technical knowledge" of Models and Views which is data parsing and DOM manipulation resepectively (shouldn't contain any Underscore or jQuery).  All it has under it's toolbelt is Backbone.Events so it can listen and act linking the tasks between the Models and View.  So yes it adds an extra layer, but like every good "micro-manager", it always knows what's going on all the time.
 
 Like the View, there is an event delegator.  In this context, it is Backbone.Events.  It has the same format: { Event Context: Method }.
 
 ```js
 // Models
 var clothes = new Backbone.Collection();
-
-clothes.add( new Backbone.Model({ type: 'Oxford button-up',    color: 'blue',   size: 'Large' }) );
-clothes.add( new Backbone.Model({ type: 'Straight leg chinos', color: 'khaki',  size: '30w 32l' }) );
-clothes.add( new Backbone.Model({ type: 'Penny loafers',       color: 'brown',  size: '10.5US' }) );
 
 // View
 var Closet = Backbone.View.extend({ 
@@ -23,7 +19,6 @@ var Closet = Backbone.View.extend({
     this.trigger('append');
   }
 });
-var closet = new Closet();
 
 // Controller
 var StyleModule = Backbone.Controller.extend({
@@ -55,6 +50,7 @@ var StyleModule = Backbone.Controller.extend({
 // Execute
 var styleModule = new StyleModule();
 styleModule.start();
+// Will alert three times "New item in closet!"
 
 ```
 
