@@ -6,9 +6,22 @@ This new class basically sits between the View and Model and acts as sort of the
 
 Like the View, there is an event delegator.  In this context, it is Backbone.Events.  It has the same format: { Event Context: Method }.
 
+Example:
+This is the data what will be returned with "/api/clothes":
 ```js
-// Models
-var clothes = new Backbone.Collection();
+[
+  { "type": "Oxford button-up",    "color": "blue",   "size": "Large" },
+  { "type": "Straight leg chinos", "color": "khaki",  "size": "30w 32l" },
+  { "type": "Penny loafers",       "color": "brown",  "size": "10.5US" }
+]
+```
+
+
+```js
+// Models/Collection
+var Clothes = Backbone.Collection.extend({
+  url: '/api/clothes'
+});
 
 // View
 var Closet = Backbone.View.extend({ 
@@ -23,18 +36,21 @@ var Closet = Backbone.View.extend({
 // Controller
 var StyleModule = Backbone.Controller.extend({
   
-  clothesCollection: new Backbone.Collection(),
+  clothesCollection: new Clothes(),
   closetView: new Closet(),
 
   events: {
+    'sync    clothesCollection': 'alertSynced',
     'add     clothesCollection': 'appendToView',
     'append  closetView'       : 'alertAdded'
   },
 
   start: function() {
-    this.clothesCollection.add( new Backbone.Model({ type: 'Oxford button-up',    color: 'blue',   size: 'Large' }) );
-    this.clothesCollection.add( new Backbone.Model({ type: 'Straight leg chinos', color: 'khaki',  size: '30w 32l' }) );
-    this.clothesCollection.add( new Backbone.Model({ type: 'Penny loafers',       color: 'brown',  size: '10.5US' }) );
+    this.clothesCollection.fetch();
+  },
+
+  alertSynced: function() {
+    alert( JSON.stringify( this.clothesCollection.toJSON() ) );
   },
 
   appendToView: function( pieceOfClothing ) {
@@ -42,7 +58,7 @@ var StyleModule = Backbone.Controller.extend({
   },
 
   alertAdded: function() {
-    alert('New item in closet!')
+    alert('New item in closet!');
   }
 
 });
@@ -50,7 +66,7 @@ var StyleModule = Backbone.Controller.extend({
 // Execute
 var styleModule = new StyleModule();
 styleModule.start();
-// Will alert three times "New item in closet!"
+// Will alert the data back and then three times "New item in closet!"
 
 ```
 
