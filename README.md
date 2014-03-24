@@ -1,4 +1,4 @@
-Backbone.Controller (a different perspective)
+Backbone.Controller
 =============================================
 No not Router, but an independent Controller
 
