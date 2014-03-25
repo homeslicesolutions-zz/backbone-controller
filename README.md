@@ -2,9 +2,9 @@ Backbone.Controller
 =============================================
 No not Router, but an independent Controller
 
-This new class basically sits between the View and Model and acts as sort of the "manager" of the two worlds as a Controller should.  Like the View this is to provide more consistency for the module/app. When reading a Controller class, it should display the workflow of that module showing how the pieces fit together between Models and Views. Lastly, it also acts like an interface to a particular module so that it should contain methods that represent a general task of that module.  More importantly, it doesn't inherit the "technical knowledge" of Models and Views which is data parsing and DOM manipulation resepectively (shouldn't contain any Underscore or jQuery).  All it has under it's toolbelt is Backbone.Events so it can listen and act linking the tasks between the Models and View.  So yes it adds an extra layer, but like every good "micro-manager", it always knows what's going on all the time.
+This new class is basically a wrapper or container of Views and Models acting like a "Manager" controlling and delegating tasks between Views and Models.  It helps decouple the dependencies between the View and Model.  Like the Backbone.View, this is to provide more consistency and structure for the module/app. When reading a Controller, it should display the workflow of that module showing how the pieces fit together between Models and Views. Lastly, it also acts like an interface to a particular module so that it should contain methods that represent a general task of that module.  More importantly, it doesn't inherit the "technical knowledge" of Models and Views which is data parsing and DOM manipulation resepectively (shouldn't contain any Underscore Collection/Array Methods or jQuery DOM Methods).  All it has under it's toolbelt is Backbone.Events so it can listen and act linking the tasks between the Models and View.  So yes, it adds an extra layer, but like every good "micro-manager", it always knows what's going on all the time.
 
-Like the View, there is an event delegator.  In this context, it is Backbone.Events instead of jQuery events.  It has the same format: { Event Context: Method }.
+Like the View, there is an event delegator.  In this context, it is Backbone.Events instead of jQuery events.  It has the same format: { Event Context: Method }.  This is help visually see how things are piped up.
 
 Example:
 This is the data what will be returned with "/api/clothes":
@@ -15,7 +15,6 @@ This is the data what will be returned with "/api/clothes":
   { "type": "Penny loafers",       "color": "brown",  "size": "10.5US" }
 ]
 ```
-
 
 ```js
 // Models/Collection
