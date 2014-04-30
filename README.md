@@ -69,4 +69,10 @@ styleModule.start();
 
 ```
 
+To shut off controller...
+```js
+styleModel.close()
+// All Backbone Classes bound to Controller will be safely closed
+```
+
 More examples and how to use coming soon.
