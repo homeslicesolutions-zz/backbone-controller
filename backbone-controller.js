@@ -1,12 +1,17 @@
 !function(_, Backbone){
 
+  window.Backbone = Backbone;
+
   // Creating a "Controller" Plugin
   // Create new Controller
   var Controller = Backbone.Controller = function(options) {
+    options = options || {};
     this.cid = _.uniqueId('control');
-    this._configure(options || {});
+    this._configure(options);
     this.initialize.apply(this, arguments);
-    this.delegateEvents();
+    var context = _.result(this, 'context');
+    this.delegateEvents.call( context, options.events );
+    return context;
   }
 
   var delegateEventSplitter = /^(\S+)\s*(.*)$/;
@@ -18,9 +23,11 @@
 
     start: function() { return this },
 
+    context: function() { return this },
+
     _configure: function(options) {
-      if (this.options) options = _.extend({}, _.result(this, 'options'), options);
-      this.options = options;
+      this.options = this.options || {};
+      _.extend(this, _.result(this, 'options'), options);
     },
 
     delegateEvents: function(events) {
@@ -54,6 +61,15 @@
     undelegateEvents: function() {
       this.stopListening();
       return this;
+    },
+
+    close: function() {
+      this.undelegateEvents();
+      for (var i in this) {
+        if ( this[i] instanceof Backbone.View ) {
+          this[i].remove();
+        }
+      }
     }
 
   });
@@ -63,7 +79,7 @@
     var parent = this;
     var child;
 
-    // The constructor function for the new subclass is either defined by you
+    // The constructor function for the new subController is either defined by you
     // (the "constructor" property in your `extend` definition), or defaulted
     // by us to simply call the parent's constructor.
     if (protoProps && _.has(protoProps, 'constructor')) {
@@ -81,7 +97,7 @@
     Surrogate.prototype = parent.prototype;
     child.prototype = new Surrogate;
 
-    // Add prototype properties (instance properties) to the subclass,
+    // Add prototype properties (instance properties) to the subController,
     // if supplied.
     if (protoProps) _.extend(child.prototype, protoProps);
 
