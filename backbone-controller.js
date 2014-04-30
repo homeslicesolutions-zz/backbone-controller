@@ -68,6 +68,11 @@
       for (var i in this) {
         if ( this[i] instanceof Backbone.View ) {
           this[i].remove();
+        } else if ( this[i] instanceof Backbone.Model 
+                    || this[i] instanceof Backbone.View
+                    || this[i] instanceof Backbone.Router
+                    || this[i] instanceof Backbone.Controller ) {
+          this[i].stopListening();
         }
       }
     }
