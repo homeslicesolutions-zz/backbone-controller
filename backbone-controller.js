@@ -1,7 +1,5 @@
 !function(_, Backbone){
 
-  window.Backbone = Backbone;
-
   // Creating a "Controller" Plugin
   // Create new Controller
   var Controller = Backbone.Controller = function(options) {
